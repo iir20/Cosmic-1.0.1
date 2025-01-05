@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Space Protocol</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e1e2f, #4e54c8, #8f94fb);
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .balance {
+            margin: 15px 0;
+            font-size: 1rem;
+        }
+
+        /* Input and button styling */
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px #8f94fb;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1rem;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .conversion-summary {
+            margin-top: 30px;
+            font-size: 1.2rem;
+        }
+
+        .wallet-connect {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff8a00;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 0.9rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .wallet-connect:hover {
+            background: #ff6a00;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .container {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="wallet-connect">Wallet Connect</div>
+    <div class="container">
+        <div class="header">Cosmic Space Protocol</div>
+        <div class="balance">Balance<br>xCIS: 00<br>CIS: 00</div>
+        <div>
+            <input type="text" placeholder="Enter xCIS Amount">
+        </div>
+        <button class="button">Convert</button>
+        <div class="conversion-summary">
+            Conversion Summary<br>
+            xCIS to Convert: 0.00<br>
+            Equivalent CIS: 0.00
+        </div>
+    </div>
+</body>
+</html>

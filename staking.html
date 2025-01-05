@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staking Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #2b1055, #7597de);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .balance {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255, 120, 140, 0.5);
+    }
+
+    .wallet-connect {
+      background: linear-gradient(135deg, #7ed6df, #22a6b3);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .wallet-connect:hover {
+      box-shadow: 0 4px 15px rgba(34, 166, 179, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="wallet-connect">Wallet Connect</button>
+    <h1>Cosmic Space Protocol</h1>
+    <div class="balance">
+      <p>Balance</p>
+      <p>xCIS: 00</p>
+      <p>CIS: 00</p>
+    </div>
+   <button class="menu-btn" onclick="location.href='nft-staking.html'">STAKE YOUR NFT</button>
+    <button class="menu-btn" onclick="location.href='Stake-xCIS-Coin.html'">STAKE YOUR xCIS COIN</button>
+  </div>
+</body>
+</html>

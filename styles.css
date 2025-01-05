@@ -1,0 +1,144 @@
+/* styles.css */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #3b3b92, #661d98);
+    background-size: 400% 400%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    animation: gradientShift 10s infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.main-container {
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 20px;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.wallet-connect {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 120, 140, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wallet-connect:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 120, 140, 0.7);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.visa-container {
+    background: linear-gradient(135deg, #4d4dff, #a020f0);
+    width: 220px;
+    height: 220px;
+    border-radius: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    color: white;
+    animation: breathing 3s infinite ease-in-out;
+    box-shadow: 0 0 30px rgba(100, 100, 255, 0.8);
+}
+
+@keyframes breathing {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(100, 100, 255, 0.8);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(160, 32, 240, 0.8);
+    }
+}
+
+.add-visa {
+    font-size: 48px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.add-visa:hover {
+    transform: rotate(45deg);
+    color: #ffdd57;
+    text-shadow: 0 0 15px rgba(255, 221, 87, 0.8);
+}
+
+.visa-text {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    animation: fadeIn 2s ease forwards;
+    animation-delay: 1s;
+    color: white;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.access-btn {
+    background: linear-gradient(135deg, #34d399, #22c55e);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52, 211, 153, 0.5);
+}
+
+.access-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(52, 211, 153, 0.7);
+}
