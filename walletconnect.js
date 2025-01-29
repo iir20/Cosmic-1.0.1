@@ -1,68 +1,185 @@
 // walletConnect.js
 
-// Function to check if a crypto wallet is available
+// UI Elements
+const notificationContainer = document.createElement('div');
+notificationContainer.id = 'notification-container';
+document.body.appendChild(notificationContainer);
+
+// Wallet Configuration
+const CONFIG = {
+  DEFAULT_CHAIN_ID: '0x1', // Ethereum Mainnet
+  INITIAL_BALANCE: 100,
+  LOCAL_STORAGE_KEY: 'xCIS_Users',
+  SESSION_STORAGE_KEY: 'xCIS_Connected'
+};
+
+// Notification System
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  notificationContainer.appendChild(notification);
+  
+  setTimeout(() => notification.remove(), 5000);
+}
+
+// Provider Check
 function isWalletAvailable() {
-    return typeof window.ethereum !== 'undefined';
+  return typeof window.ethereum !== 'undefined';
 }
 
-// Function to connect to the user's wallet
-async function connectWallet() {
-    if (!isWalletAvailable()) {
-        alert('MetaMask or another crypto wallet is not installed. Please install it to continue.');
-        return;
-    }
-
-    try {
-        // Request wallet connection
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const walletAddress = accounts[0];
-
-        // Check local storage for existing data
-        let userData = JSON.parse(localStorage.getItem('xCIS_Users')) || {};
-        
-        if (!userData[walletAddress]) {
-            // If user is new, grant 100 xCIS coins
-            userData[walletAddress] = { balance: 100 };
-            alert(`Welcome! You have been granted 100 xCIS coins.`);
-        } else {
-            alert(`Welcome back! Your balance is ${userData[walletAddress].balance} xCIS coins.`);
-        }
-
-        // Save user data to local storage
-        localStorage.setItem('xCIS_Users', JSON.stringify(userData));
-
-        // Display wallet address and balance
-        document.getElementById('walletAddress').textContent = `Connected: ${walletAddress}`;
-        document.getElementById('walletBalance').textContent = `Balance: ${userData[walletAddress].balance} xCIS coins`;
-    } catch (error) {
-        console.error('Error connecting wallet:', error);
-        alert('Failed to connect wallet. Please try again.');
-    }
-}
-
-// Function to get user balance
-function getUserBalance(walletAddress) {
-    const userData = JSON.parse(localStorage.getItem('xCIS_Users')) || {};
-    return userData[walletAddress]?.balance || 0;
-}
-
-// Function to stake coins
-function stakeCoins(walletAddress, amount) {
-    let userData = JSON.parse(localStorage.getItem('xCIS_Users')) || {};
+// Network Management
+async function checkNetwork() {
+  try {
+    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
     
-    if (!userData[walletAddress] || userData[walletAddress].balance < amount) {
-        alert('Insufficient balance to stake.');
-        return false;
+    if (chainId !== CONFIG.DEFAULT_CHAIN_ID) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: CONFIG.DEFAULT_CHAIN_ID }]
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          showNotification('Please add the Ethereum Mainnet to your wallet', 'error');
+        }
+        throw new Error('Network switch rejected');
+      }
     }
-
-    // Deduct staked amount from balance
-    userData[walletAddress].balance -= amount;
-    localStorage.setItem('xCIS_Users', JSON.stringify(userData));
-
-    alert(`Successfully staked ${amount} xCIS coins. Remaining balance: ${userData[walletAddress].balance} xCIS coins.`);
     return true;
+  } catch (error) {
+    console.error('Network check failed:', error);
+    showNotification(`Network error: ${error.message}`, 'error');
+    return false;
+  }
 }
 
-// Export functions for use in the HTML
+// User Data Management
+function getUserData() {
+  return JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
+}
+
+function updateUserData(address, data) {
+  const userData = getUserData();
+  userData[address] = { ...userData[address], ...data };
+  localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(userData));
+  return userData[address];
+}
+
+// Connection Management
+async function connectWallet() {
+  if (!isWalletAvailable()) {
+    showNotification('Please install a Web3 wallet like MetaMask', 'error');
+    return;
+  }
+
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    if (!(await checkNetwork())) return;
+
+    const walletAddress = accounts[0];
+    const userData = getUserData();
+
+    if (!userData[walletAddress]) {
+      updateUserData(walletAddress, { balance: CONFIG.INITIAL_BALANCE });
+      showNotification(`Welcome! ${CONFIG.INITIAL_BALANCE} xCIS granted`, 'success');
+    }
+
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE_KEY, walletAddress);
+    setupEventListeners();
+    updateUI(walletAddress);
+    showNotification('Wallet connected successfully', 'success');
+  } catch (error) {
+    handleConnectionError(error);
+  }
+}
+
+function disconnectWallet() {
+  sessionStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
+  window.ethereum?.removeListener('accountsChanged', handleAccountsChanged);
+  window.ethereum?.removeListener('chainChanged', handleChainChanged);
+  updateUI();
+  showNotification('Wallet disconnected', 'info');
+}
+
+// Event Handlers
+function handleConnectionError(error) {
+  console.error('Wallet connection error:', error);
+  const message = error.code === 4001 ? 'Connection rejected' : 'Connection failed';
+  showNotification(message, 'error');
+}
+
+function handleAccountsChanged(accounts) {
+  if (accounts.length === 0) disconnectWallet();
+  else updateUI(accounts[0]);
+}
+
+function handleChainChanged(chainId) {
+  if (chainId !== CONFIG.DEFAULT_CHAIN_ID) {
+    showNotification('Network changed - please reconnect', 'warning');
+    disconnectWallet();
+  }
+}
+
+function setupEventListeners() {
+  window.ethereum?.on('accountsChanged', handleAccountsChanged);
+  window.ethereum?.on('chainChanged', handleChainChanged);
+}
+
+// UI Updates
+function updateUI(address = null) {
+  const walletAddressElement = document.getElementById('walletAddress');
+  const walletBalanceElement = document.getElementById('walletBalance');
+  
+  if (address) {
+    const { balance } = getUserData()[address] || {};
+    walletAddressElement.textContent = `Connected: ${address}`;
+    walletBalanceElement.textContent = `Balance: ${balance} xCIS`;
+  } else {
+    walletAddressElement.textContent = 'Disconnected';
+    walletBalanceElement.textContent = '';
+  }
+}
+
+// Transaction Functions
+function stakeCoins(amount) {
+  const walletAddress = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+  if (!walletAddress) {
+    showNotification('Please connect wallet first', 'error');
+    return false;
+  }
+
+  const numericAmount = Number(amount);
+  if (isNaN(numericAmount) || numericAmount <= 0) {
+    showNotification('Invalid staking amount', 'error');
+    return false;
+  }
+
+  const userData = getUserData();
+  if ((userData[walletAddress]?.balance || 0) < numericAmount) {
+    showNotification('Insufficient balance', 'error');
+    return false;
+  }
+
+  const newBalance = updateUserData(walletAddress, {
+    balance: (userData[walletAddress].balance - numericAmount)
+  }).balance;
+
+  updateUI(walletAddress);
+  showNotification(`Staked ${numericAmount} xCIS. New balance: ${newBalance}`, 'success');
+  return true;
+}
+
+// Initialize connection on page load
+(function init() {
+  if (isWalletAvailable()) {
+    const connectedAddress = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+    if (connectedAddress) updateUI(connectedAddress);
+    setupEventListeners();
+  }
+})();
+
+// Export public functions
 window.connectWallet = connectWallet;
+window.disconnectWallet = disconnectWallet;
 window.stakeCoins = stakeCoins;
