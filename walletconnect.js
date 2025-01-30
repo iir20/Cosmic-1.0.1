@@ -1,13 +1,6 @@
-// walletConnect.js
-
-// UI Elements
-const notificationContainer = document.createElement('div');
-notificationContainer.id = 'notification-container';
-document.body.appendChild(notificationContainer);
-
-// Wallet Configuration
+// walletConnect.js (Updated)
 const CONFIG = {
-  DEFAULT_CHAIN_ID: '0x1', // Ethereum Mainnet
+  DEFAULT_CHAIN_ID: '0x1',
   INITIAL_BALANCE: 100,
   LOCAL_STORAGE_KEY: 'xCIS_Users',
   SESSION_STORAGE_KEY: 'xCIS_Connected'
@@ -18,168 +11,159 @@ function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   notification.textContent = message;
-  notificationContainer.appendChild(notification);
-  
+  document.getElementById('notification-container').appendChild(notification);
   setTimeout(() => notification.remove(), 5000);
 }
 
-// Provider Check
-function isWalletAvailable() {
-  return typeof window.ethereum !== 'undefined';
+// Initialize Wallet Connection
+function initWallet() {
+  const connectedAddress = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+  if (connectedAddress) updateUI(connectedAddress);
+  setupEventListeners();
 }
 
-// Network Management
-async function checkNetwork() {
-  try {
-    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-    
-    if (chainId !== CONFIG.DEFAULT_CHAIN_ID) {
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: CONFIG.DEFAULT_CHAIN_ID }]
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          showNotification('Please add the Ethereum Mainnet to your wallet', 'error');
-        }
-        throw new Error('Network switch rejected');
-      }
-    }
-    return true;
-  } catch (error) {
-    console.error('Network check failed:', error);
-    showNotification(`Network error: ${error.message}`, 'error');
-    return false;
-  }
+// Update all UI elements
+function updateUI(address = null) {
+  const userData = JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
+  
+  // Update wallet info
+  document.querySelectorAll('.wallet-address').forEach(el => {
+    el.textContent = address ? `Connected: ${address}` : 'Disconnected';
+  });
+  
+  document.querySelectorAll('.wallet-balance').forEach(el => {
+    el.textContent = address ? `Balance: ${userData[address]?.balance || 0} xCIS` : '';
+  });
+
+  // Update staking page balances
+  document.querySelectorAll('.xcis-balance').forEach(el => {
+    el.textContent = address ? `${userData[address]?.balance || 0} xCIS` : '0 xCIS';
+  });
 }
 
-// User Data Management
-function getUserData() {
-  return JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
-}
-
-function updateUserData(address, data) {
-  const userData = getUserData();
-  userData[address] = { ...userData[address], ...data };
-  localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(userData));
-  return userData[address];
-}
-
-// Connection Management
+// Modified Connect Wallet Function
 async function connectWallet() {
-  if (!isWalletAvailable()) {
-    showNotification('Please install a Web3 wallet like MetaMask', 'error');
-    return;
-  }
-
   try {
+    if (!window.ethereum) {
+      showNotification('Web3 wallet not found', 'error');
+      return;
+    }
+
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     if (!(await checkNetwork())) return;
 
-    const walletAddress = accounts[0];
-    const userData = getUserData();
+    const address = accounts[0];
+    let userData = JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
 
-    if (!userData[walletAddress]) {
-      updateUserData(walletAddress, { balance: CONFIG.INITIAL_BALANCE });
+    if (!userData[address]) {
+      userData[address] = { balance: CONFIG.INITIAL_BALANCE, stakes: [] };
+      localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(userData));
       showNotification(`Welcome! ${CONFIG.INITIAL_BALANCE} xCIS granted`, 'success');
     }
 
-    sessionStorage.setItem(CONFIG.SESSION_STORAGE_KEY, walletAddress);
-    setupEventListeners();
-    updateUI(walletAddress);
-    showNotification('Wallet connected successfully', 'success');
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE_KEY, address);
+    updateUI(address);
+    showNotification('Wallet connected', 'success');
   } catch (error) {
-    handleConnectionError(error);
+    showNotification(error.message, 'error');
   }
 }
 
-function disconnectWallet() {
-  sessionStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
-  window.ethereum?.removeListener('accountsChanged', handleAccountsChanged);
-  window.ethereum?.removeListener('chainChanged', handleChainChanged);
-  updateUI();
-  showNotification('Wallet disconnected', 'info');
-}
-
-// Event Handlers
-function handleConnectionError(error) {
-  console.error('Wallet connection error:', error);
-  const message = error.code === 4001 ? 'Connection rejected' : 'Connection failed';
-  showNotification(message, 'error');
-}
-
-function handleAccountsChanged(accounts) {
-  if (accounts.length === 0) disconnectWallet();
-  else updateUI(accounts[0]);
-}
-
-function handleChainChanged(chainId) {
-  if (chainId !== CONFIG.DEFAULT_CHAIN_ID) {
-    showNotification('Network changed - please reconnect', 'warning');
-    disconnectWallet();
-  }
-}
-
-function setupEventListeners() {
-  window.ethereum?.on('accountsChanged', handleAccountsChanged);
-  window.ethereum?.on('chainChanged', handleChainChanged);
-}
-
-// UI Updates
-function updateUI(address = null) {
-  const walletAddressElement = document.getElementById('walletAddress');
-  const walletBalanceElement = document.getElementById('walletBalance');
-  
-  if (address) {
-    const { balance } = getUserData()[address] || {};
-    walletAddressElement.textContent = `Connected: ${address}`;
-    walletBalanceElement.textContent = `Balance: ${balance} xCIS`;
-  } else {
-    walletAddressElement.textContent = 'Disconnected';
-    walletBalanceElement.textContent = '';
-  }
-}
-
-// Transaction Functions
-function stakeCoins(amount) {
-  const walletAddress = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
-  if (!walletAddress) {
-    showNotification('Please connect wallet first', 'error');
+// Staking Functionality
+function stakeCoins(amount, duration) {
+  const address = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+  if (!address) {
+    showNotification('Connect wallet first', 'error');
     return false;
   }
 
-  const numericAmount = Number(amount);
-  if (isNaN(numericAmount) || numericAmount <= 0) {
-    showNotification('Invalid staking amount', 'error');
-    return false;
-  }
-
-  const userData = getUserData();
-  if ((userData[walletAddress]?.balance || 0) < numericAmount) {
+  const userData = JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
+  if (userData[address].balance < amount) {
     showNotification('Insufficient balance', 'error');
     return false;
   }
 
-  const newBalance = updateUserData(walletAddress, {
-    balance: (userData[walletAddress].balance - numericAmount)
-  }).balance;
+  // Create stake
+  const stake = {
+    amount: Number(amount),
+    duration: Number(duration),
+    startDate: new Date().toISOString(),
+    apy: calculateAPY(duration)
+  };
 
-  updateUI(walletAddress);
-  showNotification(`Staked ${numericAmount} xCIS. New balance: ${newBalance}`, 'success');
+  userData[address].balance -= amount;
+  userData[address].stakes = userData[address].stakes || [];
+  userData[address].stakes.push(stake);
+  
+  localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(userData));
+  updateUI(address);
+  showNotification(`${amount} xCIS staked for ${duration} days`, 'success');
   return true;
 }
 
-// Initialize connection on page load
-(function init() {
-  if (isWalletAvailable()) {
-    const connectedAddress = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
-    if (connectedAddress) updateUI(connectedAddress);
-    setupEventListeners();
-  }
-})();
+function calculateAPY(duration) {
+  const apyRates = { 30: 130, 60: 160, 90: 190, 120: 220 };
+  return apyRates[duration] || 0;
+}
 
-// Export public functions
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  initWallet();
+  loadStakes();
+});
+
+// Load existing stakes
+function loadStakes() {
+  const address = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+  if (!address) return;
+
+  const userData = JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
+  const stakes = userData[address]?.stakes || [];
+  const container = document.getElementById('stakes-container');
+  
+  if (container) {
+    container.innerHTML = stakes.map((stake, index) => `
+      <div class="cyber-list-item">
+        <div class="cyber-list-content">
+          <i class="fas fa-cube"></i>
+          <span>${stake.amount} xCIS - ${stake.duration} Days (APY ${stake.apy}%)</span>
+        </div>
+        <button class="cyber-button small" onclick="claimStake(${index})">
+          <span class="cyber-button-text">CLAIM</span>
+        </button>
+      </div>
+    `).join('');
+  }
+}
+
+// Claim Stake Function
+window.claimStake = (index) => {
+  const address = sessionStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+  if (!address) return;
+
+  const userData = JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)) || {};
+  const stake = userData[address].stakes[index];
+  
+  if (!stake) {
+    showNotification('Stake not found', 'error');
+    return;
+  }
+
+  const reward = stake.amount * (stake.apy / 100) * (stake.duration / 365);
+  userData[address].balance += stake.amount + reward;
+  userData[address].stakes.splice(index, 1);
+  
+  localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify(userData));
+  loadStakes();
+  updateUI(address);
+  showNotification(`Claimed ${stake.amount + reward} xCIS`, 'success');
+};
+
+// Export functions
 window.connectWallet = connectWallet;
-window.disconnectWallet = disconnectWallet;
+window.disconnectWallet = () => {
+  sessionStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
+  updateUI();
+  showNotification('Wallet disconnected', 'info');
+};
 window.stakeCoins = stakeCoins;
