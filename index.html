@@ -1,29 +1,46 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmic Space Protocol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="cyber-grid"></div>
     <div class="main-container">
-        <header>
-            <h1>Cosmic Space Protocol</h1>
-            <button class="wallet-connect">Wallet Connect</button>
-          
-        </header>
-        <main>
-            <div class="visa-container">
-                <button class="add-visa">
-                    <span>+</span>
+        <header class="cyber-header">
+            <h1 class="cyber-title glitch" data-text="COSMIC SPACE PROTOCOL">COSMIC SPACE PROTOCOL</h1>
+            <div class="wallet-container">
+                <button class="cyber-button" onclick="connectWallet()" id="walletBtn">
+                    <span class="cyber-button-text">CONNECT WALLET</span>
+                    <span class="cyber-button-glow"></span>
                 </button>
-                <p class="visa-text">Cosmic visa for cosmic world</p>
+                <div class="wallet-info" id="walletInfo">
+                    <div class="wallet-address" id="walletAddress"></div>
+                    <div class="wallet-balance" id="walletBalance"></div>
+                    <button class="cyber-button small" onclick="disconnectWallet()">
+                        <span class="cyber-button-text">DISCONNECT</span>
+                    </button>
+                </div>
             </div>
-            <button class="access-btn" onclick="location.href='home.html'">Access Cosmic World</button>
+        </header>
+        <main class="cyber-main">
+            <div class="cyber-card hologram">
+                <div class="cyber-visa-container">
+                    <button class="cyber-add-button pulse" onclick="location.href='home.html'">
+                        <i class="fas fa-rocket"></i>
+                        <span class="cyber-glow"></span>
+                    </button>
+                    <p class="cyber-text neon">ACTIVATE COSMIC ACCESS</p>
+                </div>
+            </div>
         </main>
     </div>
+    <div id="notification-container"></div>
+    <script src="walletConnect.js"></script>
     <script src="script.js"></script>
-      <script src="walletConnect.js"></script>
 </body>
 </html>
