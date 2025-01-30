@@ -1,144 +1,90 @@
-/* styles.css */
-body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #3b3b92, #661d98);
-    background-size: 400% 400%;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    animation: gradientShift 10s infinite;
+/* Cyber Staking Components */
+.cyber-list {
+    margin-top: 2rem;
 }
 
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.main-container {
-    text-align: center;
-    width: 90%;
-    max-width: 500px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-}
-
-header {
+.cyber-list-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 1.2rem;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-header h1 {
-    font-size: 20px;
-    margin: 0;
+.cyber-list-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.cyber-input-group {
+    position: relative;
+    margin: 2rem 0;
+}
+
+.cyber-input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #7ed6df;
+    border-radius: 8px;
     color: #fff;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
 }
 
-.wallet-connect {
-    background: linear-gradient(135deg, #ff7eb3, #ff758c);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(255, 120, 140, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.cyber-input:focus {
+    outline: none;
+    border-color: #ff758c;
+    box-shadow: 0 0 15px rgba(255, 117, 140, 0.5);
 }
 
-.wallet-connect:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(255, 120, 140, 0.7);
+.cyber-options {
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
-main {
+.cyber-radio {
     display: flex;
-    flex-direction: column;
     align-items: center;
-}
-
-.visa-container {
-    background: linear-gradient(135deg, #4d4dff, #a020f0);
-    width: 220px;
-    height: 220px;
-    border-radius: 25%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    color: white;
-    animation: breathing 3s infinite ease-in-out;
-    box-shadow: 0 0 30px rgba(100, 100, 255, 0.8);
-}
-
-@keyframes breathing {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 0 20px rgba(100, 100, 255, 0.8);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 40px rgba(160, 32, 240, 0.8);
-    }
-}
-
-.add-visa {
-    font-size: 48px;
-    color: white;
-    background: none;
-    border: none;
     cursor: pointer;
-    transition: transform 0.3s ease, color 0.3s ease;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    position: relative;
 }
 
-.add-visa:hover {
-    transform: rotate(45deg);
-    color: #ffdd57;
-    text-shadow: 0 0 15px rgba(255, 221, 87, 0.8);
+.cyber-radio-dot {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #7ed6df;
+    border-radius: 50%;
+    margin-right: 1rem;
+    position: relative;
 }
 
-.visa-text {
-    margin-top: 10px;
-    font-size: 14px;
-    text-align: center;
-    animation: fadeIn 2s ease forwards;
-    animation-delay: 1s;
-    color: white;
+.cyber-radio input:checked + .cyber-radio-dot::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background: #ff758c;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
 }
 
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+.cyber-radio-label {
+    font-size: 1.1rem;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-.access-btn {
-    background: linear-gradient(135deg, #34d399, #22c55e);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 15px 30px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(52, 211, 153, 0.5);
-}
-
-.access-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(52, 211, 153, 0.7);
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 117, 140, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 117, 140, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 117, 140, 0); }
 }
