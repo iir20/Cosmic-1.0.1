@@ -1,82 +1,53 @@
+<!-- staking.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staking Page</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #2b1055, #7597de);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      text-align: center;
-      padding: 30px;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      width: 90%;
-      max-width: 400px;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .balance {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(135deg, #ff7eb3, #ff758c);
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 15px rgba(255, 120, 140, 0.5);
-    }
-
-    .wallet-connect {
-      background: linear-gradient(135deg, #7ed6df, #22a6b3);
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    .wallet-connect:hover {
-      box-shadow: 0 4px 15px rgba(34, 166, 179, 0.5);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Staking Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <button class="wallet-connect">Wallet Connect</button>
-    <h1>Cosmic Space Protocol</h1>
-    <div class="balance">
-      <p>Balance</p>
-      <p>xCIS: 00</p>
-      <p>CIS: 00</p>
+    <div class="cyber-grid"></div>
+    <div class="main-container">
+        <header class="cyber-header">
+            <h1 class="cyber-title glitch" data-text="COSMIC STAKING">COSMIC STAKING</h1>
+            <div class="wallet-container">
+                <button class="cyber-button" onclick="connectWallet()" id="walletBtn">
+                    <span class="cyber-button-text">CONNECT WALLET</span>
+                    <span class="cyber-button-glow"></span>
+                </button>
+                <div class="wallet-info" id="walletInfo">
+                    <div class="wallet-address" id="walletAddress"></div>
+                    <div class="wallet-balance" id="walletBalance"></div>
+                    <button class="cyber-button small" onclick="disconnectWallet()">
+                        <span class="cyber-button-text">DISCONNECT</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main class="cyber-main">
+            <section class="cyber-panel hologram">
+                <div class="cyber-display">
+                    <h2 class="neon">STAKING OPTIONS</h2>
+                    <div class="cyber-grid-menu">
+                        <button class="cyber-menu-btn" onclick="location.href='nft-staking.html'">
+                            <i class="fas fa-robot"></i>
+                            <span>NFT STAKING</span>
+                            <div class="cyber-glow"></div>
+                        </button>
+                        <button class="cyber-menu-btn" onclick="location.href='Stake-xCIS-Coin.html'">
+                            <i class="fas fa-bolt"></i>
+                            <span>COIN STAKING</span>
+                            <div class="cyber-glow"></div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-   <button class="menu-btn" onclick="location.href='nft-staking.html'">STAKE YOUR NFT</button>
-    <button class="menu-btn" onclick="location.href='Stake-xCIS-Coin.html'">STAKE YOUR xCIS COIN</button>
-  </div>
+    <div id="notification-container"></div>
+    <script src="walletConnect.js"></script>
 </body>
 </html>
