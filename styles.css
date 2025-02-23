@@ -1,0 +1,161 @@
+/* Cosmic Space Protocol Unified Styles */
+:root {
+  --primary: #7ed6df;
+  --secondary: #ff758c;
+  --accent: #34d399;
+  --bg-dark: #1e1e2f;
+  --bg-medium: #3b3b92;
+  --bg-light: #661d98;
+  --grid-size: 20px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, var(--bg-dark), var(--bg-medium), var(--bg-light));
+  background-size: 400% 400%;
+  color: white;
+  min-height: 100vh;
+  animation: gradientShift 10s infinite;
+  overflow-x: hidden;
+}
+
+/* Unified Animations */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glitch {
+  0% { text-shadow: 2px 0 var(--secondary); }
+  100% { text-shadow: -2px 0 var(--primary); }
+}
+
+@keyframes hologram-pulse {
+  0% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 0.8; transform: scale(1); }
+}
+
+/* Cyber Grid Background */
+.cyber-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(126, 214, 223, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 214, 223, 0.1) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Unified Components */
+.cyber-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.cyber-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(126, 214, 223, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent calc(var(--grid-size) - 1px),
+    rgba(126, 214, 223, 0.1) var(--grid-size)
+  );
+}
+
+/* Interactive Elements */
+.cyber-button {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none;
+  padding: 1rem 2rem;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cyber-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0) 80%
+  );
+  animation: scan 6s infinite linear;
+}
+
+@keyframes scan {
+  0% { transform: translate(-50%, -50%) rotate(45deg); }
+  100% { transform: translate(50%, 50%) rotate(45deg); }
+}
+
+/* Unified Form Elements */
+.cyber-input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--primary);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.cyber-input:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 15px rgba(255, 117, 140, 0.3);
+}
+
+/* Grid System */
+.cyber-grid-system {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Notification System */
+.cyber-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--primary);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
