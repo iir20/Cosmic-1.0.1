@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Staking</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/cyber-effects.css">
+</head>
+<body>
+    <div class="cyber-terminal staking">
+        <h1 class="glitch-text" data-text="ENERGY STAKING">ENERGY STAKING</h1>
+        <div class="staking-interface">
+            <input type="number" class="cyber-input" id="stakeAmount" placeholder="xCIS AMOUNT" min="0" title="Enter the amount of xCIS to stake">
+            <div class="duration-selector">
+                <div class="cyber-radio">
+                    <input type="radio" name="duration" id="30days" value="30">
+                    <label class="glitch-text" data-text="30 DAYS (130%)" for="30days"></label>
+                </div>
+                <!-- Add more duration options -->
+            </div>
+            <button class="cyber-btn stake-btn" onclick="stakeTokens()">
+                <span class="glitch-text" data-text="INITIATE STAKING">INITIATE STAKING</span>
+            </button>
+        </div>
+        <div class="transaction-history" id="transactionHistory">
+            <h2>Transaction History</h2>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
+    <script src="js/walletConnect.js" defer></script>
+    <script src="js/conversions.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/notifications.js" defer></script>
+</body>
+</html>

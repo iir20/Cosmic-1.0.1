@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Converter</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/cyber-effects.css">
+</head>
+<body>
+    <div class="cyber-terminal converter">
+        <h1 class="glitch-text" data-text="QUANTUM CONVERTER">QUANTUM CONVERTER</h1>
+        <div class="conversion-interface">
+            <input type="number" class="cyber-input" id="xcisAmount" placeholder="xCIS AMOUNT" min="0" title="Enter the amount of xCIS to convert">
+            <button class="cyber-btn convert-btn" onclick="convertTokens()">
+                <span class="glitch-text" data-text="INITIATE CONVERSION">INITIATE CONVERSION</span>
+            </button>
+            <div class="conversion-rate" data-text="1 xCIS = 0.85 CIS"></div>
+        </div>
+    </div>
+    <script src="js/walletConnect.js" defer></script>
+    <script src="js/conversions.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/notifications.js" defer></script>
+</body>
+</html>

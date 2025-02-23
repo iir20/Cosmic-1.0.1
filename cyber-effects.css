@@ -1,0 +1,61 @@
+/* NFT Specific Styles */
+.nft-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.nft-item {
+    border: 2px solid var(--neon-cyan);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.7);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nft-item.staked {
+    border-color: var(--matrix-green);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+}
+
+.nft-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--neon-pink);
+    transition: transform 0.3s ease;
+}
+
+.nft-item:hover .nft-image {
+    transform: scale(1.05);
+}
+
+.staking-controls {
+    padding: 1rem;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.earnings-display {
+    color: var(--matrix-green);
+    font-size: 0.9rem;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+}
+
+.cyber-stake-btn {
+    background: linear-gradient(45deg, var(--cyber-purple), var(--neon-pink));
+    border: none;
+    padding: 0.5rem 1rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cyber-stake-btn:hover {
+    filter: hue-rotate(45deg);
+    transform: skewX(-10deg);
+}

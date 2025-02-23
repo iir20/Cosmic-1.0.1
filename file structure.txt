@@ -1,0 +1,18 @@
+/cosmic-protocol
+│
+├── index.html
+├── home.html
+├── nft.html
+├── staking.html
+├── convert.html
+│
+├── styles
+│   ├── main.css
+│   └── cyber-effects.css
+│
+└── js
+    ├── walletConnect.js
+    ├── animations.js
+    ├── conversions.js
+    ├── notifications.js
+    └── referral.js

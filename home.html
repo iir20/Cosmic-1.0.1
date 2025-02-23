@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/cyber-effects.css">
+</head>
+<body>
+    <div class="cyber-terminal dashboard">
+        <header class="cyber-header">
+            <h1 class="glitch-layers" data-text="CONTROL PANEL">CONTROL PANEL</h1>
+            <div class="wallet-display">
+                <div data-balance="xCIS" class="cyber-balance"></div>
+                <div data-balance="CIS" class="cyber-balance"></div>
+                <button class="cyber-btn small" data-wallet>CONNECT WALLET</button>
+            </div>
+        </header>
+        
+        <nav class="cyber-nav">
+            <button class="cyber-nav-btn" onclick="location.href='nft.html'">
+                <i class="fas fa-robot"></i>
+                <span class="glitch-text" data-text="DIGITAL ASSETS">DIGITAL ASSETS</span>
+            </button>
+            <button class="cyber-nav-btn" onclick="location.href='staking.html'">
+                <i class="fas fa-bolt"></i>
+                <span class="glitch-text" data-text="ENERGY STAKING">ENERGY STAKING</span>
+            </button>
+            <button class="cyber-nav-btn" onclick="location.href='convert.html'">
+                <i class="fas fa-exchange-alt"></i>
+                <span class="glitch-text" data-text="QUANTUM CONVERTER">QUANTUM CONVERTER</span>
+            </button>
+        </nav>
+    </div>
+    <script src="js/walletConnect.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/notifications.js" defer></script>
+</body>
+</html>
